@@ -36,12 +36,13 @@ phases:
       - wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
       # found a bug with the below apt-key commands that says "cannot assign address"
       # online forums suggest its using ipv6 and the below command block disables it
-      - echo "updating hosts file for apt-key bug"
-      - { test "$UBUNTU_RELEASE" = "bionic" && getent ahosts keyserver.ubuntu.com | sed -e '/STREAM/!d;s/[[:blank:]].*/ keyserver.ubuntu.com/' | shuf >> /etc/hosts || true; }
+      - echo "disable ipv6 for dirmngr"
+      - mkdir -p ~/.gnupg && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf && apt-key adv --homedir ~/.gnupg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys A122542AB04F24E3;
+      # { test "$UBUNTU_RELEASE" = "bionic" && getent ahosts keyserver.ubuntu.com | sed -e '/STREAM/!d;s/[[:blank:]].*/ keyserver.ubuntu.com/' | shuf >> /etc/hosts || true; }
       # echo "update corretto key"
       # uncomment the below line for the first time the codebuild runs
-      - apt-key del A122542AB04F24E3
-      - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys A122542AB04F24E3
+      # apt-key del A122542AB04F24E3
+      # apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys A122542AB04F24E3
       - apt-get update && apt-get -y install jq  && pip install --upgrade awscli pytest
   pre_build:
     commands:
