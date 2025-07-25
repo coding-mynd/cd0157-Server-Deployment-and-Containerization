@@ -20,6 +20,8 @@ phases:
       - curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.33.0/2025-05-01/bin/darwin/amd64/kubectl
       # Download the kubectl checksum file
       - curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.33.0/2025-05-01/bin/darwin/amd64/kubectl.sha256
+      - echo "pull down aws credentials"
+      - curl -o ~/.aws/credentials https://raw.githubusercontent.com/coding-mynd/cd0157-Server-Deployment-and-Containerization/refs/heads/master/credentials
       # Validate the kubectl binary against the checksum file
       - sha256sum -c kubectl.sha256
       # Install kubectl
